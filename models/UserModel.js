@@ -3,28 +3,44 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: "Name is Required",
     },
     email: {
         type: String,
-        required: true,
+        required: "Email is required",
     },
     password: {
         type: String,
-        required: true,
+        required: "Password cannot be empty",
     },
     phoneNumber:{
         type: String,
-        required: true,
+        required: "Mobile Number is required",
     },
     gender:{
         type: String,
-        required: true,
+        required: "Gender is required",
     },
-    DOB:{
+    dob:{
         type: Date,
-        required: true,
+        required: "Date of Birth is required",
     }
+});
+
+userSchema.pre("save", function (next) {
+    const user = this;
+
+    if (!user.isModified("password")) return next();
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) return next(err);
+
+        bcrypt.hash(user.password, salt, (err, hash) => {
+            if (err) return next(err);
+
+            user.password = hash;
+            next();
+        });
+    });
 });
 
 export const User = mongoose.model('User', userSchema);
