@@ -1,16 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const database = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@development.pr33px5.mongodb.net/busTicketBooking`;
-
-// database = `mongodb://localhost:27017/busTicketBooking
+const database = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@development.pr33px5.mongodb.net/?retryWrites=true&w=majority&appName=Development`;
 
 const connectDB = async () => {
   try {
-    mongoose.set('strictQuery', false);
+    mongoose.set("strictQuery", false);
     mongoose.connect(database, {});
-    console.log('MongoDB Connection Success');
+    console.log("MongoDB Connection Success");
   } catch (err) {
-    console.error('MongoDB Connection Failed => ', err)
+    console.error("MongoDB Connection Failed => ", err);
   }
 };
 
