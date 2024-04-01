@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
+
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -26,6 +30,15 @@ const userSchema = new mongoose.Schema({
         required: "Date of Birth is required",
     }
 });
+
+userSchema.methods.generateAccessToken = function(){
+    let payload = {
+        id: this._id,
+      };
+    return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+    expiresIn: '20m',
+    });
+}
 
 userSchema.pre("save", function (next) {
     const user = this;

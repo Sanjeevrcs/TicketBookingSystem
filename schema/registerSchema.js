@@ -8,3 +8,4 @@ export const userValidationSchema = [
     check("gender").not().isEmpty().withMessage("Gender is required"),
     check("dob").notEmpty().withMessage("Date of Birth is required").isISO8601().toDate(),
 ];
+
