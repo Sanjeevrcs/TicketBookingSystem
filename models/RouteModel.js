@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 
 const routeSchema = new mongoose.Schema({
     from : {
-        type : Schema.Types.ObjectID,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Location"
     },
     to : {
-        type : Schema.Types.ObjectID,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Location"
-    }
+    },
     distance : {
         type : Number,
         required : "Distance is Required"

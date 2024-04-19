@@ -7,7 +7,7 @@ const seatSchema = new mongoose.Schema({
         required : "Seat Number is Required"
     },
     bus : {
-        type : Schema.Types.ObjectID,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Bus"
     },
     availability : {

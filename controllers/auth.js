@@ -5,7 +5,6 @@ export const loginUser = async (req, res) => {
 
     const { email, password } = req.body;
     const existingUser = await User.findOne({ email });
-    
     if (!existingUser) {
         return res.status(400).json({
             "status": "error",
@@ -22,11 +21,14 @@ export const loginUser = async (req, res) => {
             }
         try{
             if (result) {
+                var hour = 3600000;
                 let options = {
-                    maxAge: 20 * 60 * 1000, // would expire in 20 minutes
-                    httpOnly: true,
+                    maxAge: 14 * 24 * hour,
+                    httpOnly: false,
+                    sameSite: 'None',
                     secure: true,
-                    sameSite: "None",
+                    withCredentials: true,
+                    priority: 'High'
                 };
                 const token = existingUser.generateAccessToken(); 
                 res.cookie("SessionID", token, options); 
@@ -34,11 +36,12 @@ export const loginUser = async (req, res) => {
                     status: "success",
                     message: "You have successfully logged in.",
                 });
+                
                 return res
             }
         } catch(err) {
             console.log("err",err)
-            res.status(500).json({
+            return res.status(500).json({
                 status: "error",
                 code: 500,
                 data: [],

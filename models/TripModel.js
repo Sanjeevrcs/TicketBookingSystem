@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
-
 const tripSchema = new mongoose.Schema({
 
     route : {
-        type : Schema.Types.ObjectID,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Route"
     },
     bus : {
-        type : Schema.Types.ObjectID,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Bus"
     },
     departureTime : {
