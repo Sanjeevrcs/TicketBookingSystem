@@ -83,21 +83,33 @@ export const deleteUser = async (req,res) => {
 
 export const registerUser = async (req,res) => {
     
+    console.log(req.body, "req.body")
+
     console.log(req.body)
-    const { name, email, password, phoneNumber, gender, dob } = req.body;
+    let { name, email, password, phoneNumber, gender, dob } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     console.log(existingUser, "existingUser")
     
     if (existingUser){
+        console.log("existingUser")
         return res.status(400).json({
             "status" : "error",
             "message" : "Account already exists"
         })
     }
     else{
-        let newUser =  User.create( req.body );
+        console.log(req.body, "req.body")
+
+        const [day, month, year] = dob.split('-');
+        dob = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        
+        console.log(dob);
+
+        let newUser = new User( { name, email, password, phoneNumber, gender, dob } );
+        newUser.save();
+        console.log(newUser, "newUser")
         res.status(200).json({
             "status" : "success",
             "message" : "Account has been successfully created"

@@ -9,3 +9,5 @@ export const userValidationSchema = [
     check("dob").notEmpty().withMessage("Date of Birth is required").isISO8601().toDate(),
 ];
 
+
+

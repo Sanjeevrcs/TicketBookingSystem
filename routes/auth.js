@@ -6,7 +6,7 @@ import  Validate  from "../middleware/validate.js"
 
 const auth = express.Router();
 
-auth.post('/register', userValidationSchema, Validate, registerUser)
+auth.post('/register', Validate, registerUser)
 auth.post('/login', loginUser)
 auth.delete('/delete',deleteUser)
 auth.get('/logout', verifySession, logoutUser)

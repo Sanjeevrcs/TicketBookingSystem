@@ -15,6 +15,11 @@ const tripSchema = new mongoose.Schema({
     },
     availability : {
         type : Boolean,
+    },
+    cost : {
+        type : Number,
+        required : "Cost is Required",
+        default : 400
     }
 
 })

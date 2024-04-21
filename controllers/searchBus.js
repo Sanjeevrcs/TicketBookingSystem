@@ -66,8 +66,18 @@ export const searchBuses = async (req,res) => {
 export const getSeat = async (req, res) =>{
     try{
     const busId = req.params.busId;
-    console.log(busId,"ssss")
+    const tripId = req.params.tripId;
     const bus = await Bus.findOne({_id: busId});
+
+    console.log(tripId)
+    const trip = await Trip.findOne({ _id: tripId });
+    if (!trip) {
+        return res.status(404).send({
+            status: "error",
+            message: "Invalid Trip"
+        })
+    }
+
     console.log(bus)
     if (!bus) {
         return res.status(404).send({
@@ -76,9 +86,16 @@ export const getSeat = async (req, res) =>{
         })
     }
     const seats = await Seat.find({ bus: busId });
+    // for(let i=0;i<seats.length;i++){
+    //     seats[i].availability = true;
+    //     seats[i].save();
+    // }
+    console.log(trip.cost)
     return res.status(200).send({
         "busId" : bus._id,
+        "busName" : bus.busName,
         "seats": seats,
+        "cost" : trip.cost
     })
 }catch(err){
     console.log(err)
@@ -105,16 +122,20 @@ export const bookSeat = async (req, res) =>{
         })
     }
     let bookings = [];
+    console.log("seatId",seatId)
     if(seatId.length === 0){
         return res.status(400).send({
             status: "error",
             message: "Please Select atlest one seat for booking"
         })
     }
+    console.log(seatId)
+
     for(let i=0;i<seatId.length;i++){
-        
 
         const seat = await Seat.findOne({ _id: seatId[i] });
+        seat.availability = false;
+        seat.save();
 
         if (!seat) {
             return res.status(404).send({
@@ -123,16 +144,14 @@ export const bookSeat = async (req, res) =>{
             })
         }
         const bus = seat.bus;
-    
-        const bookingExists = await Booking.findOne({ user: userId, trip: tripId, seat: seat, status: "Booked", });
-        console.log(bookingExists)
+        const bookingExists = await Booking.findOne({trip: tripId, seat: seat, status: "Booked",});
+
         if (bookingExists) {
             return res.status(409).send({
                 status: "error",
                 message: "Seat already booked"
             })
         }
-
         const booking = new Booking({
             user: userId,
             trip: tripId,
@@ -158,6 +177,27 @@ export const bookSeat = async (req, res) =>{
 }
 }
 
+export const cancelBooking = async (req,res) => {
+    const user = req.user;
+    const booking = await Booking.findById(req.params.id);
+    if(!booking) {
+        return res.status(404).send('Booking not found');
+    }
+
+    booking.status = 'Canceled';
+    const seat = await Seat.findOne({_id: booking.seat});
+    seat.availability = true;
+    seat.save();
+    await booking.save();
+
+    if(booking.user._id !== user._id) {
+        return res.status(403).send('You are not the owner of this booking');
+    }
+
+    
+
+    return res.status(200).send('Booking cancelled');
+}
 
 
 
