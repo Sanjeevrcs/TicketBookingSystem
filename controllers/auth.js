@@ -121,5 +121,10 @@ export const registerUser = async (req,res) => {
 
 export const logoutUser = (req,res) => {
     res.clearCookie('SessionID');
-    res.end()
+    res.status(200).json({
+        "status" : "success",
+        "message" : "Logout Successful"
+    })
+    // res.end()
+    
 }
