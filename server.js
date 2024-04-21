@@ -15,7 +15,7 @@ app.listen(3000, () => {
 });
 app.use(
   cors({
-    origin: "https://master--ticketbookingclient.netlify.app/",
+    origin: "https://master--ticketbookingclient.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
