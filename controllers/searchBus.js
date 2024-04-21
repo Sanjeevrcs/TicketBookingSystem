@@ -105,6 +105,12 @@ export const bookSeat = async (req, res) =>{
         })
     }
     let bookings = [];
+    if(seatId.length === 0){
+        return res.status(400).send({
+            status: "error",
+            message: "Please Select atlest one seat for booking"
+        })
+    }
     for(let i=0;i<seatId.length;i++){
         
 
@@ -151,3 +157,8 @@ export const bookSeat = async (req, res) =>{
     })
 }
 }
+
+
+
+
+
